@@ -1,0 +1,36 @@
+
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title id="top">My Music</title>
+		<meta name="description" content="form to add new books">
+		<meta name="author" content="Mark Tyers">
+		<link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
+		<script type="module" src="main.js"></script>
+	</head>
+	<body>
+		<header>
+		<h1>SECURE PAGE</h1>
+		<a href="/logout">Log out</a>
+		</header>
+		{{#if msg}}
+ 			<aside>
+				<p class="msg">{{msg}}</p>
+			</aside>
+		{{/if}}
+		<main>
+		<h2>Music uploaded by the user</h2>
+  <table>
+    <tr>
+      <td>Song Name</td><td>Album Art</td><td>Artist</td><td>Song Duration(s)</td>
+    </tr>
+		<tr>
+			<td>Here with you</td><td>ART.PNG</td><td>Netsky</td><td>154</td>
+		</tr>
+	</table>
+		<p><a href="/secure/upload">Upload a file</a></p>
+		</main> 
+	</body>
+</html>
