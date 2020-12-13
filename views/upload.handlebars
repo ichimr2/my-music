@@ -13,8 +13,11 @@
 </head>
 <body>
 
-  <form method="post" action="/uploadfiles" enctype="multipart/form-data">
-  <label>Upload an MP3 file: <br><br><br> <input type="file" name="myfile" multiple />
+  <form method="post" action="/secure/upload" enctype="multipart/form-data">
+	 <h1>Upload a file from local directory: </h1>
+  <label>file: <input type="file" name="myfile" multiple /> 
+							 <hr>
+							 <input type="submit" />
   </label>
   </form>
 </body>

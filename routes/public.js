@@ -71,7 +71,7 @@ router.post('/register', async ctx => {
 
 
 
-router.post('/uploadfiles', async ctx => {
+router.post('/secure', async ctx => {
 	try {
 			console.log(ctx.session.user)
 
@@ -121,7 +121,7 @@ router.post('/login', async ctx => {
 		ctx.session.authorised = true
 		ctx.session.user = body.user
 		const referrer = body.referrer || '/secure'
-		return ctx.redirect(`${referrer}?msg=you are now logged in...`)
+		return ctx.redirect(`${referrer}`)
 	} catch(err) {
 		ctx.hbs.msg = err.message
 		await ctx.render('secure', ctx.hbs)
