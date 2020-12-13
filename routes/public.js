@@ -68,41 +68,6 @@ router.post('/register', async ctx => {
 })
 
 
-
-
-
-router.post('/secure', async ctx => {
-	try {
-			console.log(ctx.session.user)
-
-		var myfile = ctx.request.files.myfile
-		myfile.extension = mime.extension(myfile.type)
-		if (myfile.type != "audio/mpeg")
-			{
-			throw new Error('wrong file type');
-			}
-			
-    await fs.copy(myfile.path, `uploads/${myfile.name}`) 	
-	}
-	
-	catch(err) {
- 		await ctx.render('index')
- 		 console.log('first catch')
-     console.log(err.message)
-  }
-		
-			mm.parseFile(`uploads/${myfile.name}`)
-  .then( metadata => {
-								console.log(metadata['format']['duration'])
-								console.log(metadata['common']['title'])
-								console.log(metadata['common']['album'])
-								console.log(metadata['common']['artists'])
-
-			})
-});
-
-
-
 router.get('/login', async ctx => {
 	console.log(ctx.hbs)
 	await ctx.render('login', ctx.hbs)
