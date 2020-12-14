@@ -68,41 +68,6 @@ router.post('/register', async ctx => {
 })
 
 
-
-
-
-router.post('/uploadfiles', async ctx => {
-	try {
-			console.log(ctx.session.user)
-
-		var myfile = ctx.request.files.myfile
-		myfile.extension = mime.extension(myfile.type)
-		if (myfile.type != "audio/mpeg")
-			{
-			throw new Error('wrong file type');
-			}
-			
-    await fs.copy(myfile.path, `uploads/${myfile.name}`) 	
-	}
-	
-	catch(err) {
- 		await ctx.render('index')
- 		 console.log('first catch')
-     console.log(err.message)
-  }
-		
-			mm.parseFile(`uploads/${myfile.name}`)
-  .then( metadata => {
-								console.log(metadata['format']['duration'])
-								console.log(metadata['common']['title'])
-								console.log(metadata['common']['album'])
-								console.log(metadata['common']['artists'])
-
-			})
-});
-
-
-
 router.get('/login', async ctx => {
 	console.log(ctx.hbs)
 	await ctx.render('login', ctx.hbs)
@@ -121,7 +86,7 @@ router.post('/login', async ctx => {
 		ctx.session.authorised = true
 		ctx.session.user = body.user
 		const referrer = body.referrer || '/secure'
-		return ctx.redirect(`${referrer}?msg=you are now logged in...`)
+		return ctx.redirect(`${referrer}`)
 	} catch(err) {
 		ctx.hbs.msg = err.message
 		await ctx.render('secure', ctx.hbs)
@@ -129,6 +94,74 @@ router.post('/login', async ctx => {
 		account.close()
 	}
 })
+
+router.get('/secure/upload', async ctx => {
+	try {
+
+		await ctx.render('upload', ctx.hbs)
+	} catch(err) {
+		ctx.hbs.error = err.message
+		await ctx.render('error', ctx.hbs)
+	}
+})
+
+
+
+
+// router.get('/upload', async ctx => {
+// 	try {
+// 		console.log('handlebars data')
+// 		console.log(ctx.hbs)
+// 		await ctx.render('upload', ctx.hbs)
+// 	} catch(err) {
+// 		ctx.hbs.error = err.message
+// 		await ctx.render('error', ctx.hbs)
+// 	}
+// })
+
+router.post('/upload', async ctx => {
+	try {
+			console.log(ctx.session.user)
+
+		var myfile = ctx.request.files.myfile
+		myfile.extension = mime.extension(myfile.type)
+		if (myfile.type != "audio/mpeg")
+			{
+			throw new Error('wrong file type');
+			}
+			
+    await fs.copy(myfile.path, `uploads/${myfile.name}`) 	
+	}
+	
+	catch(err) {
+ 		 await ctx.render('index')
+ 		 console.log('first catch')
+     console.log(err.message)
+  }
+		
+	var musicData = {}
+	
+	const parsedFile = await mm.parseFile(`uploads/${myfile.name}`)
+	 let duration = parsedFile.format['duration']
+	 let title = parsedFile.common['title']
+	 let album = parsedFile.common['album']
+	 let artist = parsedFile.common['artist']
+	 musicData.duration = duration
+	  musicData.title = title
+	 musicData.album = album
+	 musicData.artist = artist
+	ctx.hbs.data = musicData
+	console.log(ctx.hbs)
+	await ctx.render('secure', ctx.hbs)
+
+	 
+	  
+	
+		
+	
+});
+
+
 
 router.get('/logout', async ctx => {
 	ctx.session.authorised = null
