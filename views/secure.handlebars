@@ -24,10 +24,18 @@
 		<h2>Music uploaded by the user</h2>
   <table>
     <tr>
-      <td>Song Name</td><td>Album Art</td><td>Artist</td><td>Song Duration(s)</td>
+      <td>Song Name</td><td>Artist</td><td>Song Duration(s)</td>
     </tr>
 		<tr>
-			<td>Here with you</td><td>ART.PNG</td><td>Netsky</td><td>154</td>
+			
+			
+			 {{#with data}}
+      <td> {{title}} </td><td>{{artist}}</td><td>{{duration}}</td>
+
+    {{/with}}
+			
+		
+		
 		</tr>
 	</table>
 		<p><a href="/secure/upload">Upload a file</a></p>

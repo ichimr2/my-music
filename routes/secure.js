@@ -31,45 +31,9 @@ router.get('/', async ctx => {
 	}
 })
 
-router.get('/upload', async ctx => {
-	try {
 
-		await ctx.render('upload', ctx.hbs)
-	} catch(err) {
-		ctx.hbs.error = err.message
-		await ctx.render('error', ctx.hbs)
-	}
-})
 
-router.post('/upload', async ctx => {
-	try {
-			console.log(ctx.session.user)
 
-		var myfile = ctx.request.files.myfile
-		myfile.extension = mime.extension(myfile.type)
-		if (myfile.type != "audio/mpeg")
-			{
-			throw new Error('wrong file type');
-			}
-			
-    await fs.copy(myfile.path, `uploads/${myfile.name}`) 	
-	}
-	
-	catch(err) {
- 		await ctx.render('index')
- 		 console.log('first catch')
-     console.log(err.message)
-  }
-		
-			mm.parseFile(`uploads/${myfile.name}`)
-  .then( metadata => {
-								console.log(metadata['format']['duration'])
-								console.log(metadata['common']['title'])
-								console.log(metadata['common']['album'])
-								console.log(metadata['common']['artists'])
-
-			})
-});
 
 
 export default router
