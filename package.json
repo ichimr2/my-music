@@ -37,7 +37,8 @@
 		"music-metadata": "^7.5.0",
 		"nodemon": "^2.0.6",
 		"save-dev": "0.0.1-security",
-		"sqlite-async": "^1.1.0"
+		"sqlite-async": "^1.1.0",
+		"sqlite3": "^5.0.0"
 	},
 	"devDependencies": {
 		"ava": "^3.13.0",

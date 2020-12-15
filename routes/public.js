@@ -1,20 +1,13 @@
+
 import Router from 'koa-router'
-import bodyParser from 'koa-body'
 import mime from 'mime-types'
 import fs from 'fs-extra'
-
-import Koa from 'koa'
 import serve from 'koa-static'
 import views from 'koa-views'
-import * as mm from 'music-metadata';
-import * as util from 'util'
-import Accounts from '../modules/accounts.js'
-import Music from '../modules/music.js'
 const router = new Router()
-router.use(bodyParser({multipart: true}))
 
-
-var dbName = 'website.db'
+import Accounts from '../modules/accounts.js'
+const dbName = 'website.db'
 
 /**
  * The secure home page.
@@ -22,20 +15,13 @@ var dbName = 'website.db'
  * @name Home Page
  * @route {GET} /
  */
- router.get('/', async ctx => {
- 	try {
-// 		console.log("home")
-//  		const music = await new Music(dbName)
-//  		let data = music.getMusic()
-		
-//  		ctx.hbs.data = data
-
- 		await ctx.render('login', ctx.hbs)
- 	} catch(err) {
-		console.log(err)
- 		await ctx.render('error', ctx.hbs)
- 	}
- })
+router.get('/', async ctx => {
+	try {
+		await ctx.render('index', ctx.hbs)
+	} catch(err) {
+		await ctx.render('error', ctx.hbs)
+	}
+})
 
 
 /**
@@ -55,27 +41,24 @@ router.get('/register', async ctx => await ctx.render('register'))
 router.post('/register', async ctx => {
 	const account = await new Accounts(dbName)
 	try {
+		// call the functions in the module
 		await account.register(ctx.request.body.user, ctx.request.body.pass, ctx.request.body.email)
 		ctx.redirect(`/login?msg=new user "${ctx.request.body.user}" added, you need to log in`)
 	} catch(err) {
+		console.log(err)
 		ctx.hbs.msg = err.message
 		ctx.hbs.body = ctx.request.body
 		console.log(ctx.hbs)
 		await ctx.render('register', ctx.hbs)
 	} finally {
-		account.close()
+		await account.close()
 	}
 })
-
 
 router.get('/login', async ctx => {
 	console.log(ctx.hbs)
 	await ctx.render('login', ctx.hbs)
 })
-
-
-
-
 
 router.post('/login', async ctx => {
 	const account = await new Accounts(dbName)
@@ -84,87 +67,20 @@ router.post('/login', async ctx => {
 		const body = ctx.request.body
 		await account.login(body.user, body.pass)
 		ctx.session.authorised = true
-		ctx.session.user = body.user
 		const referrer = body.referrer || '/secure'
-		return ctx.redirect(`${referrer}`)
+		return ctx.redirect(`${referrer}?msg=you are now logged in...`)
 	} catch(err) {
+		console.log(err)
 		ctx.hbs.msg = err.message
-		await ctx.render('secure', ctx.hbs)
+		await ctx.render('login', ctx.hbs)
 	} finally {
-		account.close()
+		await account.close()
 	}
 })
-
-router.get('/secure/upload', async ctx => {
-	try {
-
-		await ctx.render('upload', ctx.hbs)
-	} catch(err) {
-		ctx.hbs.error = err.message
-		await ctx.render('error', ctx.hbs)
-	}
-})
-
-
-
-
-// router.get('/upload', async ctx => {
-// 	try {
-// 		console.log('handlebars data')
-// 		console.log(ctx.hbs)
-// 		await ctx.render('upload', ctx.hbs)
-// 	} catch(err) {
-// 		ctx.hbs.error = err.message
-// 		await ctx.render('error', ctx.hbs)
-// 	}
-// })
-
-router.post('/upload', async ctx => {
-	try {
-			console.log(ctx.session.user)
-
-		var myfile = ctx.request.files.myfile
-		myfile.extension = mime.extension(myfile.type)
-		if (myfile.type != "audio/mpeg")
-			{
-			throw new Error('wrong file type');
-			}
-			
-    await fs.copy(myfile.path, `uploads/${myfile.name}`) 	
-	}
-	
-	catch(err) {
- 		 await ctx.render('index')
- 		 console.log('first catch')
-     console.log(err.message)
-  }
-		
-	var musicData = {}
-	
-	const parsedFile = await mm.parseFile(`uploads/${myfile.name}`)
-	 let duration = parsedFile.format['duration']
-	 let title = parsedFile.common['title']
-	 let album = parsedFile.common['album']
-	 let artist = parsedFile.common['artist']
-	 musicData.duration = duration
-	  musicData.title = title
-	 musicData.album = album
-	 musicData.artist = artist
-	ctx.hbs.data = musicData
-	console.log(ctx.hbs)
-	await ctx.render('secure', ctx.hbs)
-
-	 
-	  
-	
-		
-	
-});
-
-
 
 router.get('/logout', async ctx => {
 	ctx.session.authorised = null
 	ctx.redirect('/?msg=you are now logged out')
 })
+
 export default router
