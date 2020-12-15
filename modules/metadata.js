@@ -34,7 +34,7 @@ class Metadata {
 
 	async all() {
 		const sql = 'SELECT users.user, trackinfo.* FROM trackinfo, users\
-						WHERE trackinfo.id = users.id;'
+						WHERE trackinfo.userid = users.id;'
 		const metadata = await this.db.all(sql)
 		return metadata
 	}

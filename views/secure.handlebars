@@ -21,18 +21,18 @@
 			</aside>
 		{{/if}}
 		<main>
-		<h2>Music uploaded by the user</h2>
+		<h2>Uploaded songs</h2>
 
-		<p><a href="/upload">Upload a file</a></p>
+		<p><a href="/secure/upload">Upload a file</a></p>
 	<table>
 		<tr>
-      <th>Song Name</th><th>Artist</th><th>Album</th><th>Duration</th>
+      <th>Song Name</th><th>Artist</th><th>Album Art</th><th>Duration</th>
 		</tr>
 		{{#each records}}
 		<tr>
 			<td>{{this.trackname}}</td>
 			<td>{{this.artistname}}</td>
-			<td><img src="images/{{this.albumart}}" /></td>
+			<td><img src="5009CEM/public/avatars/{{this.albumart}}" /></td>
 			<td>{{this.duration}}</td>
 		</tr>
 		{{/each}}
@@ -49,6 +49,5 @@
 		</tr>
 			</table>
 		</main>
-		<a class="add" href="/secure/upload">Upload a file</a>
 	</body>
 </html>

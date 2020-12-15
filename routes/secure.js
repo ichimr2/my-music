@@ -33,7 +33,6 @@ router.get('/', async ctx => {
 		ctx.hbs.records = records
 		await ctx.render('secure', ctx.hbs)
 	} catch(err) {
-		console.log('AI BELUT PUALFDSAFAS')
 		ctx.hbs.error = err.message
 		await ctx.render('error', ctx.hbs)
 		console.log('finally')
@@ -54,16 +53,19 @@ router.get('/upload', async ctx => {
 
 router.post('/upload', async ctx => {
 	try {
-		console.log(ctx.session.user)
+			console.log(ctx.session.user)
+		console.log('fs.copy2')
+ 
 		var myfile = ctx.request.files.myfile
 		myfile.extension = mime.extension(myfile.type)
+		console.log('fs.copy3')
 		if (myfile.type != "audio/mpeg")
 			{
-			console.log('sss')
 			throw new Error('wrong file type');
 			}
- 
-		await fs.copy(myfile.path, `uploads/${myfile.name}`) 	
+	 console.log('fs.copy4')
+    await fs.copy(myfile.path, `5009CEM/uploads/${myfile.name}`) 	
+	console.log('fs.copy5')
 	}
  
 	catch(err) {
@@ -71,7 +73,6 @@ router.post('/upload', async ctx => {
  		 console.log('first catch')
      console.log(err.message)
   }
-	return ctx.redirect('/secure?msg=file uploaded')
  
 	var musicData = {}
  
@@ -86,14 +87,13 @@ router.post('/upload', async ctx => {
 	 musicData.artist = artist
 	ctx.hbs.data = musicData
 	console.log(ctx.hbs)
-	await ctx.render('secure', ctx.hbs)
+	return ctx.redirect('/crm?msg=file uploaded')
  
  
  
  
  
- 
-})
+});
 
 
 
