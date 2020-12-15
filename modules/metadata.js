@@ -38,6 +38,12 @@ class Metadata {
 		const metadata = await this.db.all(sql)
 		return metadata
 	}
+	
+	
+	
+	async close() {
+		await this.db.close()
+	}
 }
 
 export default Metadata

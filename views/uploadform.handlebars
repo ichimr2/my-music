@@ -1,0 +1,34 @@
+
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title id="top">My Music</title>
+		<meta name="description" content="music files viewer">
+		<meta name="author" content="Mark Tyers">
+		<link href="{{host}}/style.css" type="text/css" rel="stylesheet" />
+		<script type="module" src="main.js"></script>"
+	</head>
+	<body>
+		<header>
+			<h1>Upload</h1>
+			<a href="/logout">Log out</a>
+		</header>
+		{{#if msg}}
+		<aside>
+		<p class="msg">{{msg}}</p>
+		</aside>
+		{{/if}}
+		<main>
+			<form method="post" action="secure/upload" enctype="multipart/form-data">
+				<p>
+					<label>file: <input type="file" name="myfile" multiple /> 
+							 <hr>
+							 <input type="submit" />
+					</label>
+				</p>
+			</form>
+		</main>
+	</body>
+</html>
