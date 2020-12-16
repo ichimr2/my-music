@@ -32,12 +32,47 @@ class Metadata {
 		})()
 	}
 
-	async all() {
-		const sql = 'SELECT users.user, trackinfo.* FROM trackinfo, users\
-						WHERE trackinfo.userid = users.id;'
-		const metadata = await this.db.all(sql)
+	async all(userid) {
+		
+		
+		
+		const metadata = await this.db.all('SELECT DISTINCT trackinfo.* FROM trackinfo, users\
+						WHERE trackinfo.userid = $id', {
+							$id : userid
+						})
+	
+	
 		return metadata
 	}
+	
+	
+	async addSong(userid,username,title,artist,album,duration){
+		console.log("inserting into database", title)
+		let albumart = 'NA'
+		console.log(userid, username,title,artist,album,duration)
+// 		let userid = id
+// 		let username = userid
+// 		let song_title = title
+// 		let artist = artist
+// 		let duration = dur
+		
+		
+		let soMany = 10;
+		console.log(`This is ${soMany} times easier!`);
+
+		
+		let sql_statement = `INSERT INTO trackinfo (userid, username, trackname, artistname, duration, albumart)\
+						  VALUES(${userid}, '${username}', '${title}', '${artist}', '${duration}', '${albumart}')`;
+			console.log(sql_statement)
+		await this.db.run(sql_statement)
+		
+// 		INSERT INTO trackinfo(userid, username, trackname, artistname, duration, albumart)
+// 	VALUES(3, "user3", "We Come One", "Faithless", "2m 57s", "77.jpg");
+
+		
+		
+	}
+	
 	
 	
 	

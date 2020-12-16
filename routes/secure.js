@@ -17,7 +17,6 @@ router.use(bodyParser({multipart: true}))
 
 async function checkAuth(ctx, next) {
 	console.log('secure router middleware')
-	console.log(ctx.hbs)
 	if(ctx.hbs.authorised !== true) return ctx.redirect('/login?msg=you need to log in&referrer=/secure')
 	await next()
 }
@@ -27,10 +26,12 @@ router.use(checkAuth)
 router.get('/', async ctx => {
 	const metadata = await new Metadata(dbName)
 	try {
-		console.log('ss')
-		const records = await metadata.all()
-		console.log(records)
+		console.log('test')
+		console.log(ctx.session.userid)
+		let userid = ctx.session.userid
+		const records = await metadata.all(userid)
 		ctx.hbs.records = records
+		console.log(ctx.hbs.records)
 		await ctx.render('secure', ctx.hbs)
 	} catch(err) {
 		ctx.hbs.error = err.message
@@ -51,49 +52,45 @@ router.get('/upload', async ctx => {
 })
 
 
-router.post('/upload', async ctx => {
-	try {
-			console.log(ctx.session.user)
-		console.log('fs.copy2')
+// router.post('/uploadfile', async ctx => {
+// 	console.log("upload submitted")
+// 	try {
+// 		console.log(ctx.session.user)
+// 		console.log('fs.copy2')
+// 		var myfile = ctx.request.files.myfile
+// 		myfile.extension = mime.extension(myfile.type)
+// 		console.log('fs.copy3')
+// 		if (myfile.type != "audio/mpeg")
+// 			{
+// 			throw new Error('wrong file type');
+// 			}
+// 	 console.log('fs.copy4')
+//     await fs.copy(myfile.path, `5009CEM/uploads/${myfile.name}`) 	
+// 	console.log('fs.copy5')
+// 	}
  
-		var myfile = ctx.request.files.myfile
-		myfile.extension = mime.extension(myfile.type)
-		console.log('fs.copy3')
-		if (myfile.type != "audio/mpeg")
-			{
-			throw new Error('wrong file type');
-			}
-	 console.log('fs.copy4')
-    await fs.copy(myfile.path, `5009CEM/uploads/${myfile.name}`) 	
-	console.log('fs.copy5')
-	}
+// 	catch(err) {
+//  		 await ctx.render('index')
+//  		 console.log('first catch')
+//      console.log(err.message)
+//   }
  
-	catch(err) {
- 		 await ctx.render('index')
- 		 console.log('first catch')
-     console.log(err.message)
-  }
+// 	var musicData = {}
  
-	var musicData = {}
+// 	const parsedFile = await mm.parseFile(`uploads/${myfile.name}`)
+// 	 let duration = parsedFile.format['duration']
+// 	 let title = parsedFile.common['title']
+// 	 let album = parsedFile.common['album']
+// 	 let artist = parsedFile.common['artist']
+// 	 musicData.duration = duration
+// 	  musicData.title = title
+// 	 musicData.album = album
+// 	 musicData.artist = artist
+// 	ctx.hbs.data = musicData
+// 	console.log(ctx.hbs)
+// 	return ctx.redirect('/crm?msg=file uploaded')
  
-	const parsedFile = await mm.parseFile(`uploads/${myfile.name}`)
-	 let duration = parsedFile.format['duration']
-	 let title = parsedFile.common['title']
-	 let album = parsedFile.common['album']
-	 let artist = parsedFile.common['artist']
-	 musicData.duration = duration
-	  musicData.title = title
-	 musicData.album = album
-	 musicData.artist = artist
-	ctx.hbs.data = musicData
-	console.log(ctx.hbs)
-	return ctx.redirect('/crm?msg=file uploaded')
- 
- 
- 
- 
- 
-});
+// });
 
 
 

@@ -5,9 +5,12 @@ import fs from 'fs-extra'
 import serve from 'koa-static'
 import views from 'koa-views'
 const router = new Router()
-
+import * as mm from 'music-metadata';
+import * as util from 'util'
 import Accounts from '../modules/accounts.js'
 const dbName = 'website.db'
+import Metadata from '../../5009CEM/modules/metadata.js'
+
 
 /**
  * The secure home page.
@@ -26,6 +29,51 @@ router.get('/', async ctx => {
 		await ctx.render('error', ctx.hbs)
 	}
 })
+
+
+router.post('/secure/upload/uploadfile', async ctx => {
+
+	try {
+		console.log('fs.copy2')
+		var myfile = ctx.request.files.myfile
+		myfile.extension = mime.extension(myfile.type)
+		console.log('fs.copy3')
+		if (myfile.type != "audio/mpeg")
+			{
+			throw new Error('wrong file type');
+			}
+	 console.log('fs.copy4')
+    await fs.copy(myfile.path, `uploads/${myfile.name}`) 	
+	console.log('fs.copy5')
+	}
+ 
+	catch(err) {
+ 		 await ctx.render('index')
+ 		 console.log('first catch')
+     console.log(err.message)
+  }
+ 
+	var musicData = {}
+ 
+	const parsedFile = await mm.parseFile(`uploads/${myfile.name}`)
+	 let duration = parsedFile.format['duration']
+	 let title = parsedFile.common['title']
+	 let album = parsedFile.common['album']
+	 let artist = parsedFile.common['artist']
+	 musicData.duration = duration
+	  musicData.title = title
+	 musicData.album = album
+	 musicData.artist = artist
+	ctx.hbs.data = musicData
+	let username = ctx.session.user
+	let userid = ctx.session.userid
+	const metadata = await new Metadata(dbName)
+	metadata.addSong(userid,username,title,artist,album,duration)
+	
+	
+	return ctx.redirect('/secure?msg=file uploaded')
+});
+
 
 
 /**
