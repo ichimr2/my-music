@@ -32,7 +32,7 @@ header {
 }
 
 h1, h2, h3 {
-	margin: 0;
+	margin: auto;
 	padding: 0;
 	color: #444;
 }
@@ -245,7 +245,9 @@ dd {
 table {
 	/* border: 1px solid grey; */
 	border-collapse: collapse;
-	margin: auto;
+	margin-left: auto;
+	margin-right: auto;
+	width: 60%;
 }
 
 tr:nth-child(odd) {
@@ -256,6 +258,8 @@ td, th {
 	/* border: 1px solid grey; */
 	padding: 0.5vw;
 	font-size: 1.5vw;
+	margin:auto;
+	width: 60%;
 }
 
 td:last-child, th:last-child {

@@ -28,7 +28,7 @@ router.get('/', async ctx => {
 	try {
 		console.log('test')
 		console.log(ctx.session.userid)
-		let userid = ctx.session.userid
+		const userid = ctx.session.userid
 		const records = await metadata.all(userid)
 		ctx.hbs.records = records
 		console.log(ctx.hbs.records)

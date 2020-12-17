@@ -21,8 +21,7 @@ class Music {
 	}
 	
 	
-	async putMusic(autor,title)
-{
+	async putMusic(autor,title) {
 	
 	
 	const sql = 'INSERT INTO music, ?autor,title'

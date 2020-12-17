@@ -1,0 +1,8 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[remote "origin"]
+	url = https://github.coventry.ac.uk/ichimr2/5009CEM.git
+	fetch = +refs/*:refs/*
+	mirror = true
