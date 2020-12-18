@@ -9,7 +9,7 @@ import * as mm from 'music-metadata';
 import * as util from 'util'
 import Accounts from '../modules/accounts.js'
 const dbName = 'website.db'
-import Metadata from '../../5009CEM/modules/metadata.js'
+import Metadata from '../modules/metadata.js'
 
 
 /**
