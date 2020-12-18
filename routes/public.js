@@ -88,7 +88,6 @@ router.get('/register', async ctx => await ctx.render('register'))
  * The script to process new user registrations.
  *
  * @name Register Script
- * @route {POST} /register
  */
 router.post('/register', async ctx => {
 	const account = await new Accounts(dbName)
